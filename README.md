@@ -3,43 +3,52 @@
 
 
 ## Project Overview  
-This project builds a Movie Recommendation System using the TMDB 5000 Movie Dataset. The goal is to design different types of recommendation engines that help users discover movies they are likely to enjoy based on ratings, metadata, cast/crew, and user behavior.
-
-The notebook explores ranking methods, content-based filtering, and collaborative filtering to evaluate movie popularity, similarity, and personalization.
+This project builds and evaluates movie recommenders on Kaggle's [The Movies Dataset](https://www.kaggle.com/datasets/rounakbanik/the-movies-dataset) (TMDB metadata for ~45k movies plus a 100k-rating MovieLens sample). The goal is to compare different types of recommendation engines (popularity, content-based, collaborative filtering and a hybrid) and measure how well each one ranks movies a user will like.
 
 
 
 ## Project Highlights  
 
 ### Objective  
-- Build a ranking system for movies using IMDB’s weighted rating formula.
+- Build a ranking system for movies using IMDB's weighted rating formula.
 - Develop content-based recommenders using:
    - Movie overviews & taglines.
-   - Cast, crew, genres, and keywords.
-- Implement collaborative filtering to personalize recommendations for users.
-- Compare different approaches to understand strengths and limitations.
+   - Cast, director, genres, and keywords.
+- Implement collaborative filtering (item-item and SVD) to personalize recommendations.
+- Compare all approaches with an offline, time-based evaluation.
 
 ### Concepts & Techniques Used  
 - **Movie Ranking System:** 
-   - Weighted rating formula based on vote count and average rating
+   - Weighted rating (Bayesian average) based on vote count and average rating, overall and per genre
 
 - **Text Preprocessing & NLP:** 
-   - Stopword removal, lemmatization, and stemming
+   - Lowercasing, number normalisation, stopword removal
+   - Stemming of keywords
    - TF-IDF and Count Vectorizer for feature extraction
 
 - **Content-Based Filtering:**  
-  - Using *Overview and Tagline* for recommendation through TF-IDF and cosine similarity
-  - Using *Metadata*, combining cast, crew, director and generes with CountVectorizer 
-  - Cosine similarity to identify most similar movies
+  - *Overview and Tagline* with TF-IDF and cosine similarity
+  - *Metadata*: top-3 cast, director (weighted x3), genres and keywords with a Count Vectorizer
+  - Nearest neighbours computed per query instead of a full N x N similarity matrix
 
 - **Collaborative Filtering:**
-   - User-movie rating matrix
-   - Centered ratings to account for user biases
-   - Experimentation with Surprise library (SVD-based models planned)
+   - Item-item CF on mean-centred ratings
+   - SVD matrix factorisation (Surprise)
+   - Hybrid: reciprocal rank fusion of SVD and metadata content
+
+- **Offline Evaluation:**
+   - Per-user time-based split (most recent 20% of each user's ratings held out)
+   - Precision@10, Recall@10, Hit rate@10, NDCG@10 with bootstrap confidence intervals
+   - Catalogue coverage and popularity bias
+   - RMSE / MAE for rating prediction
 
 ### Tools & Libraries  
-- **Python** (Pandas, NumPy, Scikit-learn, NLTP, SciPy)  
-- **Matplotlib & Seaborn** (data visualization)  
-- **Surprise** (collaborative filtering & SVD-based recommendation)  
+- **Python** (Pandas, NumPy, SciPy, Scikit-learn, NLTK)  
+- **Surprise** (SVD-based collaborative filtering)  
+- **Matplotlib** (data visualization)  
 
----
+## How to run
+
+1. Download `movies_metadata.csv`, `credits.csv`, `keywords.csv`, `ratings_small.csv` and `links_small.csv` from [Kaggle](https://www.kaggle.com/datasets/rounakbanik/the-movies-dataset) into the project folder (or set `DATA_DIR` in the notebook).
+2. `pip install -r requirements.txt`
+3. Run `Movie-Recommender.ipynb` top to bottom.
