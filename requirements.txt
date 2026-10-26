@@ -3,6 +3,5 @@ pandas
 scipy
 scikit-learn
 nltk
-scikit-surprise
-matplotlib
+sentence-transformers
 jupyter
