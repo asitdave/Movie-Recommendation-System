@@ -15,7 +15,7 @@ This project builds movie recommenders on Kaggle's [The Movies Dataset](https://
    - Movie overviews & taglines (TF-IDF).
    - Cast, director, genres, and keywords (token overlap).
    - Sentence embeddings of overviews, genres and keywords (semantic similarity).
-- Implement item-item collaborative filtering to personalize recommendations.
+- Implement user-user collaborative filtering to personalize recommendations.
 
 ### Concepts & Techniques Used  
 - **Movie Ranking System:** 
@@ -33,8 +33,9 @@ This project builds movie recommenders on Kaggle's [The Movies Dataset](https://
   - Nearest neighbours computed per query instead of a full N x N similarity matrix
 
 - **Collaborative Filtering:**
-   - Item-item CF: cosine similarity on mean-centred user ratings
-   - Personalised recommendations per user from their rating history
+   - User-user CF: cosine similarity between users' mean-centred rating vectors
+   - Predicted rating = user's average + similarity-weighted average of the 30 nearest neighbours' (centred) ratings
+   - Personalised recommendations per user from their rating history; users without ratings get none
    - MovieLens ids mapped to TMDB ids with `links_small.csv`
 
 ### Tools & Libraries  
@@ -50,4 +51,4 @@ This project builds movie recommenders on Kaggle's [The Movies Dataset](https://
 ## Next steps
 - Quantitative offline evaluation (time-based split, NDCG@10) against popularity baselines
 - Combine the semantic, metadata and collaborative signals, then learn the combination with a ranking model
-- Matrix factorisation (SVD / ALS)
+- Item-item CF and matrix factorisation (SVD / ALS)
